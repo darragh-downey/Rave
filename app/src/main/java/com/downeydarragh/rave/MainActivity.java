@@ -4,14 +4,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
 
 public class MainActivity extends ActionBarActivity {
+    GridView gridView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // start asynctask
+        DownloadTask downloadTask = new DownloadTask();
+        MovieAdapter movieAdapter = new MovieAdapter(MainActivity.this, );
     }
 
     @Override
