@@ -8,21 +8,29 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Movie> movies = new ArrayList<Movie>();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+=======
+public class MainActivity extends ActionBarActivity {
+    GridView gridView;
+
+>>>>>>> origin/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+<<<<<<< HEAD
 
         new DownloadTask(this).execute();
 
@@ -35,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new MovieAdapter(movies);
         mRecyclerView.setAdapter(mAdapter);
+=======
+        // start asynctask
+        DownloadTask downloadTask = new DownloadTask();
+        MovieAdapter movieAdapter = new MovieAdapter(MainActivity.this, );
+>>>>>>> origin/master
     }
 
     @Override
