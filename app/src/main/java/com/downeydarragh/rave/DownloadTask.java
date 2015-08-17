@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by Darragh on 29/07/2015.
  */
-public class DownloadTask extends AsyncTask<String, Integer, MovieAdapter> {
+public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     private static final String LOG_TAG = DownloadTask.class.getSimpleName();
 
     private Context context;
@@ -52,7 +52,7 @@ public class DownloadTask extends AsyncTask<String, Integer, MovieAdapter> {
      * @see #publishProgress
      */
     @Override
-    protected MovieAdapter doInBackground(String... resources) {
+    protected ArrayList<Movie> doInBackground(String... resources) {
         String resource = resources[0];
         try{
             url = new URL(resource);
@@ -79,6 +79,6 @@ public class DownloadTask extends AsyncTask<String, Integer, MovieAdapter> {
     } 
 
     @Override
-    protected void onPostExecute(MovieAdapter result){
+    protected void onPostExecute(ArrayList<Movie> result){
     }
 }
