@@ -2,16 +2,39 @@ package com.downeydarragh.rave;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends AppCompatActivity {
+    private ArrayList<Movie> movies = new ArrayList<Movie>();
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new DownloadTask(this).execute();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new GridLayoutManager(this, 4);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new MovieAdapter(movies);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
