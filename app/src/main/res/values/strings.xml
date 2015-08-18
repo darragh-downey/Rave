@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="api_key">1594010f449c11caf1fba711c8613b2c</string>
 </resources>

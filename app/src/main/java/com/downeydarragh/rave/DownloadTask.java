@@ -7,8 +7,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
@@ -54,23 +56,52 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     @Override
     protected ArrayList<Movie> doInBackground(String... resources) {
         String resource = resources[0];
+        String responseJson = null;
+        BufferedReader bufferedReader = null;
         try{
             url = new URL(resource);
             connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
             inputStream = new BufferedInputStream(connection.getInputStream());
 
-            byte[] buffer = new byte[1024 * 4];
-            int size = 0;
-            while ((size = inputStream.read(buffer)) != -1){
+            StringBuffer buffer = new StringBuffer();
+            if(inputStream == null)
+                return null;
 
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
             }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            responseJson = buffer.toString();
         }catch (IOException e){
             Log.e(LOG_TAG, "IOException error", e);
-        }finally {
-            connection.disconnect();
+            // If the code didn't successfully get the weather data, there's no point in attemping
+            // to parse it.
+            return null;
+        } finally{
+            if (connection != null) {
+                connection.disconnect();
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (final IOException e) {
+                    Log.e("PlaceholderFragment", "Error closing stream", e);
+                }
+            }
         }
-
-        return null;
+        return rootView;
     }
 
     @Override
