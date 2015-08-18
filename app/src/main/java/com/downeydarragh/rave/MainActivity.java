@@ -18,13 +18,14 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private RequestBuilder requestBuilder = new RequestBuilder(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new DownloadTask(this).execute();
+        new DownloadTask(this).execute(requestBuilder.getPopularMovies());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
 

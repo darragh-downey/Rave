@@ -50,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder(View view) {
             super(view);
             // update the rest of the data  i.e. posters and titles
-            ImageButton = (ImageButton) view.
+            ImageView imageView = (ImageView) view.findViewById(R.id.cardmovie_poster);
         }
     }
 }

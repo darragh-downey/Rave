@@ -84,6 +84,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
                 return null;
             }
             responseJson = buffer.toString();
+
         }catch (IOException e){
             Log.e(LOG_TAG, "IOException error", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
@@ -101,7 +102,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
                 }
             }
         }
-        return rootView;
+        return ;
     }
 
     @Override
@@ -111,5 +112,6 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
 
     @Override
     protected void onPostExecute(ArrayList<Movie> result){
+
     }
 }
