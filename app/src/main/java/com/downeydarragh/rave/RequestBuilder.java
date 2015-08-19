@@ -16,7 +16,7 @@ public class RequestBuilder {
         this.context = context;
     }
 
-    // http://api.themoviedb.org/discover/movie/discover/movie?sort_by=popularity.desc
+    // http://api.themoviedb.org/discover/movie/discover/movie?sort_by=popularity.desc?api_key=1594010f449c11caf1fba711c8613b2c
     public String getPopularMovies(){
         requestURL = null;
         uriBuilder = new Uri.Builder();
@@ -31,7 +31,7 @@ public class RequestBuilder {
         return requestURL;
     }
 
-    // http://api.themoviedb.org/3/movie/top_rated
+    // http://api.themoviedb.org/3/movie/top_rated?sort-by=popularity.desc?api_key=1594010f449c11caf1fba711c8613b2c
     public String getHighestRated(){
         requestURL = null;
         uriBuilder = new Uri.Builder();
