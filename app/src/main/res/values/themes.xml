@@ -11,6 +11,6 @@
     </style>
 
     <style name="RaveTheme.TextStyle" parent="TextAppearance.AppCompat">
-
+        <item name="android:textColorPrimary">#ffff</item>
     </style>
 </resources>

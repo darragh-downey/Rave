@@ -5,6 +5,7 @@ import android.util.Log;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -27,7 +28,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     private URL url;
     private InputStream inputStream;
     private HttpURLConnection connection;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
 
     public DownloadTask(Context context){
         this.context = context;
@@ -36,7 +37,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     @Override
     protected void onPreExecute(){
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(context, "Wait", "Getting the latest films");
+        //progressBar = (ProgressBar) findViewById(R.id.progress_circular);
     }
 
     /**
@@ -58,6 +59,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
         String resource = resources[0];
         String responseJson = null;
         BufferedReader bufferedReader = null;
+        ArrayList<Movie> movies = null;
         try{
             url = new URL(resource);
             connection = (HttpURLConnection) url.openConnection();
@@ -84,7 +86,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
                 return null;
             }
             responseJson = buffer.toString();
-
+            Log.i(LOG_TAG, responseJson);
         }catch (IOException e){
             Log.e(LOG_TAG, "IOException error", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
@@ -102,7 +104,7 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
                 }
             }
         }
-        return ;
+        return movies;
     }
 
     @Override
@@ -112,6 +114,9 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
 
     @Override
     protected void onPostExecute(ArrayList<Movie> result){
-
+        if(!MainActivity.movies.isEmpty()){
+            MainActivity.movies.clear();
+        }
+        MainActivity.movies.addAll(result);
     }
 }

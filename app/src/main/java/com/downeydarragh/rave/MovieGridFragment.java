@@ -62,7 +62,7 @@ public class MovieGridFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_grid);
+        View view = inflater.inflate(R.layout.fragment_movie_grid, null);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.movie_recycler_view);
 

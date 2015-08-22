@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Movie> movies = new ArrayList<Movie>();
+    static ArrayList<Movie> movies = new ArrayList<Movie>();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -29,9 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
 
-        mRecyclerView.setHasFixedSize(true);
-
         mLayoutManager = new GridLayoutManager(this, 4);
+
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new MovieAdapter(movies);
