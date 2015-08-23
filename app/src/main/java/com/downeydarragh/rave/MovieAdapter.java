@@ -19,17 +19,20 @@ import java.util.List;
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
     static ArrayList<Movie> movies = new ArrayList<>();
-    static OnPosterClickListener onItemClickListener;
+    static View.OnClickListener posterClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            MovieViewHolder movieViewHolder = (MovieViewHolder) v.getTag();
+            int position = movieViewHolder.getAdapterPosition();
+            Movie movie = movies.get(position);
+            Toast.makeText(v.getContext(), movie.getTitle(), Toast.LENGTH_LONG).show();
+        }
+    };
+    static Context context;
 
-    public MovieAdapter(Context context){
-        //new DownloadTask(context).execute();
-        //this.movies = movies;
-        RequestBuilder requestBuilder = new RequestBuilder(context);
-        new DownloadTask(context).execute(requestBuilder.getPopularMovies());
-    }
-
-    public void setOnItemClickListener(final OnPosterClickListener onItemClickListener){
-        this.onItemClickListener = onItemClickListener;
+    public MovieAdapter(Context context, ArrayList<Movie> result){
+        this.context = context;
+        this.movies = result;
     }
 
     @Override
@@ -42,12 +45,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(final MovieViewHolder holder, int position) {
         // set card information
         Movie movie = movies.get(position);
         holder.bindMovie(movie);
-        ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.cardmovie_poster);
-        Picasso.with(holder.itemView.getContext()).load(movies.get(position).getPosterURI()).into(imageView);
+        holder.imageView.setTag(holder);
+        holder.imageView.setOnClickListener(posterClickListener);
+        Picasso.with(context).load(movie.getPosterURI()).into(holder.imageView);
     }
 
     @Override
@@ -55,25 +59,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return movies.size();
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private Movie movie;
+    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+        protected Movie movie;
+        protected ImageView imageView;
 
         public MovieViewHolder(View view) {
             super(view);
             // update the rest of the data  i.e. posters and titles
-            view.setOnClickListener(this);
-            ImageView imageView = (ImageView) view.findViewById(R.id.cardmovie_poster);
-            Picasso.with(imageView.getContext()).load(movie.getPosterURI()).into(imageView);
-        }
-
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param v The view that was clicked.
-         */
-        @Override
-        public void onClick(final View v) {
-            onItemClickListener.onItemClick(v, getAdapterPosition());
+            imageView = (ImageView) view.findViewById(R.id.cardmovie_poster);
         }
 
         public void bindMovie(Movie movie) {

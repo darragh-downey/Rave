@@ -1,21 +1,21 @@
 package com.downeydarragh.rave;
 
+import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -28,14 +28,14 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     private URL url;
     private InputStream inputStream;
     private HttpURLConnection connection;
+    private View rootView;
+    private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private MovieAdapter adapter;
-    private MovieGridFragment movieGridFragment;
 
     public DownloadTask(Context context){
         this.context = context;
-        this.movieGridFragment = new MovieGridFragment();
-        this.adapter = new MovieAdapter(context);
+        rootView = ((Activity)context).getWindow().findViewById(R.id.root_view);
     }
 
     @Override
@@ -47,26 +47,17 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     @Override
     protected ArrayList<Movie> doInBackground(String... resources) {
         String resource = resources[0];
-        String responseJson = null;
-        BufferedReader bufferedReader = null;
         ArrayList<Movie> movies = new ArrayList<>();
         try{
             url = new URL(resource);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             try{
-                //inputStream = new BufferedInputStream(connection.getInputStream());
-                InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
-                if(connection.getInputStream() == null)
+                inputStream = new BufferedInputStream(connection.getInputStream());
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                if(inputStream == null)
                     return null;
-                /*
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder stringBuilder = new StringBuilder(inputStream.available());
-                String line;
-                while ((line = reader.readLine()) != null){
-                    stringBuilder.append(line);
-                }
-                */
+
                 // create array list of movies here
                 MovieBuilder movieBuilder = new MovieBuilder();
                 if (movies != null) {
@@ -96,16 +87,10 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     }
 
     @Override
-    protected void onProgressUpdate(Integer... params) {
-        //setProgressPercent(params[0]);
-    } 
-
-    @Override
     protected void onPostExecute(ArrayList<Movie> result){
-        if(!adapter.movies.isEmpty()){
-            adapter.movies.clear();
-        }
-        adapter.movies.addAll(result);
+        adapter = new MovieAdapter(context, result);
         adapter.notifyDataSetChanged();
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.movie_recycler_view);
+        recyclerView.setAdapter(adapter);
     }
 }
