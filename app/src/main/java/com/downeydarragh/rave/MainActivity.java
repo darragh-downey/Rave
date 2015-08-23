@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    static ArrayList<Movie> movies = new ArrayList<Movie>();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -26,15 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         new DownloadTask(this).execute(requestBuilder.getPopularMovies());
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
-
-        mLayoutManager = new GridLayoutManager(this, 4);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new MovieAdapter(movies);
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

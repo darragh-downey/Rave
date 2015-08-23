@@ -29,9 +29,13 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
     private InputStream inputStream;
     private HttpURLConnection connection;
     private ProgressBar progressBar;
+    private MovieAdapter adapter;
+    private MovieGridFragment movieGridFragment;
 
     public DownloadTask(Context context){
         this.context = context;
+        this.movieGridFragment = new MovieGridFragment();
+        this.adapter = new MovieAdapter(context);
     }
 
     @Override
@@ -40,53 +44,37 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
         //progressBar = (ProgressBar) findViewById(R.id.progress_circular);
     }
 
-    /**
-     * Override this method to perform a computation on a background thread. The
-     * specified parameters are the parameters passed to {@link #execute}
-     * by the caller of this task.
-     * <p/>
-     * This method can call {@link #publishProgress} to publish updates
-     * on the UI thread.
-     *
-     * @param resources The parameters of the task.
-     * @return A result, defined by the subclass of this task.
-     * @see #onPreExecute()
-     * @see #onPostExecute
-     * @see #publishProgress
-     */
     @Override
     protected ArrayList<Movie> doInBackground(String... resources) {
         String resource = resources[0];
         String responseJson = null;
         BufferedReader bufferedReader = null;
-        ArrayList<Movie> movies = null;
+        ArrayList<Movie> movies = new ArrayList<>();
         try{
             url = new URL(resource);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.connect();
-
-            inputStream = new BufferedInputStream(connection.getInputStream());
-
-            StringBuffer buffer = new StringBuffer();
-            if(inputStream == null)
-                return null;
-
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
+            try{
+                //inputStream = new BufferedInputStream(connection.getInputStream());
+                InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+                if(connection.getInputStream() == null)
+                    return null;
+                /*
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder(inputStream.available());
+                String line;
+                while ((line = reader.readLine()) != null){
+                    stringBuilder.append(line);
+                }
+                */
+                // create array list of movies here
+                MovieBuilder movieBuilder = new MovieBuilder();
+                if (movies != null) {
+                    movies.addAll(movieBuilder.getMovies(inputStreamReader));
+                }
+            }catch (IOException e){
+                Log.e(LOG_TAG, "Error", e);
             }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            responseJson = buffer.toString();
-            Log.i(LOG_TAG, responseJson);
         }catch (IOException e){
             Log.e(LOG_TAG, "IOException error", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
@@ -96,9 +84,9 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
             if (connection != null) {
                 connection.disconnect();
             }
-            if (bufferedReader != null) {
+            if (inputStream != null) {
                 try {
-                    bufferedReader.close();
+                    inputStream.close();
                 } catch (final IOException e) {
                     Log.e("PlaceholderFragment", "Error closing stream", e);
                 }
@@ -114,9 +102,10 @@ public class DownloadTask extends AsyncTask<String, Integer, ArrayList<Movie>> {
 
     @Override
     protected void onPostExecute(ArrayList<Movie> result){
-        if(!MainActivity.movies.isEmpty()){
-            MainActivity.movies.clear();
+        if(!adapter.movies.isEmpty()){
+            adapter.movies.clear();
         }
-        MainActivity.movies.addAll(result);
+        adapter.movies.addAll(result);
+        adapter.notifyDataSetChanged();
     }
 }

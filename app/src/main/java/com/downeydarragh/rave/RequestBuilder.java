@@ -16,7 +16,7 @@ public class RequestBuilder {
         this.context = context;
     }
 
-    // http://api.themoviedb.org/discover/movie/discover/movie?sort_by=popularity.desc?api_key=1594010f449c11caf1fba711c8613b2c
+    // http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=1594010f449c11caf1fba711c8613b2c
     public String getPopularMovies(){
         requestURL = null;
         uriBuilder = new Uri.Builder();
@@ -25,13 +25,13 @@ public class RequestBuilder {
                 .appendPath("3")
                 .appendPath("discover")
                 .appendPath("movie")
-                .appendQueryParameter("sort-by", "popularity.desc")
+                .appendQueryParameter("sort_by", "popularity.desc")
                 .appendQueryParameter("api_key", context.getString(R.string.api_key));
         requestURL = uriBuilder.build().toString();
         return requestURL;
     }
 
-    // http://api.themoviedb.org/3/movie/top_rated?sort-by=popularity.desc?api_key=1594010f449c11caf1fba711c8613b2c
+    // http://api.themoviedb.org/3/movie/top_rated?sort_by=popularity.desc&api_key=1594010f449c11caf1fba711c8613b2c
     public String getHighestRated(){
         requestURL = null;
         uriBuilder = new Uri.Builder();
@@ -40,7 +40,7 @@ public class RequestBuilder {
                 .appendPath("3")
                 .appendPath("movie")
                 .appendPath("top_rated")
-                .appendQueryParameter("sort-by", "popularity.desc")
+                .appendQueryParameter("sort_by", "popularity.desc")
                 .appendQueryParameter("api_key", context.getString(R.string.api_key));
         requestURL = uriBuilder.build().toString();
         return requestURL;
