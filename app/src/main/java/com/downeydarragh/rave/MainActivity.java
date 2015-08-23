@@ -1,28 +1,33 @@
 package com.downeydarragh.rave;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.View;
+import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MovieAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ProgressBar progressBar;
     private RequestBuilder requestBuilder = new RequestBuilder(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        setProgressBarIndeterminateVisibility(true);
 
         new DownloadTask(this).execute(requestBuilder.getPopularMovies());
     }
@@ -44,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.action_popular:
-                downloadTask = new DownloadTask(this);
-                downloadTask.execute(requestBuilder.getPopularMovies());
+                //downloadTask = new DownloadTask(this, this);
+                //downloadTask.execute(requestBuilder.getPopularMovies());
                 return true;
             case R.id.action_highest:
-                downloadTask = new DownloadTask(this);
-                downloadTask.execute(requestBuilder.getHighestRated());
+                //downloadTask = new DownloadTask(this, this);
+                //downloadTask.execute(requestBuilder.getHighestRated());
                 return true;
             default:
                 break;

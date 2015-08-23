@@ -20,12 +20,11 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
     static ArrayList<Movie> movies = new ArrayList<>();
     static OnPosterClickListener onItemClickListener;
+    static Context context;
 
-    public MovieAdapter(Context context){
-        //new DownloadTask(context).execute();
-        //this.movies = movies;
-        RequestBuilder requestBuilder = new RequestBuilder(context);
-        new DownloadTask(context).execute(requestBuilder.getPopularMovies());
+    public MovieAdapter(Context context, ArrayList<Movie> movies){
+        this.context = context;
+        this.movies = movies;
     }
 
     public void setOnItemClickListener(final OnPosterClickListener onItemClickListener){
@@ -47,12 +46,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = movies.get(position);
         holder.bindMovie(movie);
         ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.cardmovie_poster);
-        Picasso.with(holder.itemView.getContext()).load(movies.get(position).getPosterURI()).into(imageView);
+        Picasso.with(context)
+                .load(movies.get(position).getPosterURI())
+                .into(imageView);
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return (null != movies ? movies.size() : 0);
     }
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,7 +64,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             // update the rest of the data  i.e. posters and titles
             view.setOnClickListener(this);
             ImageView imageView = (ImageView) view.findViewById(R.id.cardmovie_poster);
-            Picasso.with(imageView.getContext()).load(movie.getPosterURI()).into(imageView);
+            Picasso.with(context)
+                    .load(movie.getPosterURI())
+                    .into(imageView);
         }
 
         /**
