@@ -21,8 +21,8 @@ public class MovieBuilder {
         try{
             return readJsonObject(reader);
         }finally{
-                reader.close();
-            }
+            reader.close();
+        }
     }
 
     private ArrayList<Movie> readJsonObject(JsonReader reader) throws IOException {

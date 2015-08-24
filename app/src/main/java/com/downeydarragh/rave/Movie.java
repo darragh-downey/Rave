@@ -82,7 +82,7 @@ public class Movie {
         builder.scheme("http")
                 .authority("image.tmdb.org")
                 .appendPath("t").appendPath("p")
-                .appendPath("w185").appendPath(getPosterPath());
+                .appendPath("w185").appendEncodedPath(getPosterPath());
         return builder.build().toString();
     }
 

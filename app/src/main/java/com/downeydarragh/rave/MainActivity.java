@@ -6,30 +6,33 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.ProgressBar;
+
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ProgressBar progressBar;
     private RequestBuilder requestBuilder = new RequestBuilder(this);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-        setProgressBarIndeterminateVisibility(true);
+        mLayoutManager = new GridLayoutManager(getApplicationContext(), 4);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new MovieAdapter(this, new ArrayList<Movie>());
+        mRecyclerView.setAdapter(mAdapter);
 
         new DownloadTask(this).execute(requestBuilder.getPopularMovies());
+        */
     }
 
     @Override
@@ -49,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.action_popular:
-                //downloadTask = new DownloadTask(this, this);
+                //downloadTask = new DownloadTask(this);
                 //downloadTask.execute(requestBuilder.getPopularMovies());
-                return true;
+                //return true;
             case R.id.action_highest:
-                //downloadTask = new DownloadTask(this, this);
+                //downloadTask = new DownloadTask(this);
                 //downloadTask.execute(requestBuilder.getHighestRated());
-                return true;
+                //return true;
             default:
                 break;
         }
